@@ -1,0 +1,46 @@
+import yfinance as yf
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+tickers = ["AKBNK.IS", "SISE.IS", "THYAO.IS", "BIMAS.IS", "ASELS.IS"]
+benchmark = "XU100.IS"
+
+data = yf.download(tickers + [benchmark], start="2024-07-01", end="2025-07-01")["Close"]
+returns = np.log(data / data.shift(1)).dropna()
+
+stock_returns = returns[tickers]
+benchmark_returns = returns[benchmark]
+rf_daily = 0.25 / 252
+
+# Performans ölçümleri
+results = []
+
+for ticker in tickers:
+    ret = stock_returns[ticker]
+    excess_ret = ret - rf_daily
+    excess_bench = benchmark_returns - rf_daily
+
+    beta = np.cov(excess_ret, excess_bench)[0][1] / np.var(excess_bench)
+    alpha = excess_ret.mean() - beta * excess_bench.mean()
+    sharpe = excess_ret.mean() / excess_ret.std()
+
+    results.append({
+        "Ticker": ticker,
+        "Alpha (Daily)": alpha,
+        "Beta": beta,
+        "Sharpe Ratio": sharpe
+    })
+
+df = pd.DataFrame(results)
+
+# Sharpe Oranı Grafiği
+plt.bar(df["Ticker"], df["Sharpe Ratio"], color="orange")
+plt.title("Hisse Bazında Sharpe Oranları")
+plt.xlabel("Hisse")
+plt.ylabel("Sharpe Oranı")
+plt.grid(True, linestyle="--", alpha=0.6)
+plt.tight_layout()
+plt.show()
+
+print(df)
