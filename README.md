@@ -22,3 +22,5 @@ Portföy seçiminde hisse kalitesini anlamaya yarar.
 Yüksek Sharpe oranı, daha fazla getiri/riski temsil eder.
 
 Finansal performans analizinde temel araçları içerir.
+
+<img width="1354" height="721" alt="Ekran görüntüsü 2025-07-16 010205" src="https://github.com/user-attachments/assets/82321b51-cdcd-4c1c-ae0e-8de02ed95ec0" />
